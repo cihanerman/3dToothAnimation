@@ -18,7 +18,8 @@
     <script src="js/three.js"></script>
     <script src="js/DragControls.js"></script>
     <script src="js/TrackballControls.js"></script>
-    <script src="js/stats.min.js"></script>
+	<script src="js/stats.min.js"></script>
+	<p id="mouse-position" style="float: right;"></p>
 
     <script>
         var container, stats;
@@ -98,6 +99,9 @@
 				var dragControls = new THREE.DragControls( objects, camera, renderer.domElement );
 				dragControls.addEventListener( 'dragstart', function ( event ) { controls.enabled = false; } );
 				dragControls.addEventListener( 'dragend', function ( event ) { controls.enabled = true; } );
+				console.log(dragControls);
+
+				
 
 				var info = document.createElement( 'div' );
 				info.style.position = 'absolute';
@@ -129,6 +133,12 @@
 				controls.update();
 				renderer.render( scene, camera );
 			}
+
+
+			container.addEventListener('mousemove', function (event) {
+				document.getElementById('mouse-position').innerText = 'x: ' + event.clientX + 'y: ' + event.clientY;
+			})
+
 
     </script>
 </body>
