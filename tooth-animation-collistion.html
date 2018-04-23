@@ -152,35 +152,29 @@
 			document.getElementById('mouse-position').innerText = 'x: ' + event.clientX + 'y: ' + event.clientY;
 		})
 
-		function updateContact(MovingCube, collidableMeshList){
-
+		function updateContact(MovingCube, collidableMeshList){		
+			for (var obje of collidableMeshList) {
+				if (obje != contactBox || obje != contactBox2) {
+					obje.material.color = new THREE.Color(0.2 * 0xffffff);
+				}
+			}
 			var originPoint = MovingCube.position.clone();
 			for (var vertexIndex = 0; vertexIndex < MovingCube.geometry.vertices.length; vertexIndex++)
-			{		
+			{			
 				var localVertex = MovingCube.geometry.vertices[vertexIndex].clone();
 				var globalVertex = localVertex.applyMatrix4( MovingCube.matrix );
 				var directionVector = globalVertex.sub( MovingCube.position );
-
 				var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
 				var collisionResults = ray.intersectObjects( collidableMeshList );
 
-				if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) 
+				if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()) 
 				{
-					MovingCube.material.color = new THREE.Color(0.3 * 0xff0000);
-					if(collisionResults.length > 0 && collisionResults.length < 2){
-						collisionResults[0].object.material.color = new THREE.Color(0.3 * 0xff0000);
-						console.log(collisionResults[0].object.position);
-					}
+					var contactBox = collisionResults[0];
+					var contactBox2 = MovingCube;
+					console.log(collisionResults[0]);
+					contactBox2.material.color = new THREE.Color(0.3 * 0xff0000);
+					contactBox.object.material.color = new THREE.Color(0.3 * 0xff0000);
 				}
-				else// if ( collisionResults.length == 0 ) 
-				{
-					MovingCube.material.color = new THREE.Color(0.2 * 0xffffff);
-					if(collisionResults[0]){
-						collisionResults[0].object.material.color = new THREE.Color(0.2 * 0xffffff);
-						console.log(collisionResults[0].object.position);
-					}
-				}
-				
 			}
 
 			controls.update();
